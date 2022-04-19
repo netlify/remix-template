@@ -12,14 +12,14 @@
   "dependencies": {
     "@netlify/functions": "latest",
     "@remix-run/netlify-edge": "experimental-netlify-edge",
-    "@remix-run/react": "remix-run/remix#experimental-netlify-edge",
+    "@remix-run/react": "experimental-netlify-edge",
     "cross-env": "^7.0.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "remix-run/remix#experimental-netlify-edge",
-    "@remix-run/eslint-config": "remix-run/remix#experimental-netlify-edge",
+    "@remix-run/dev": "experimental-netlify-edge",
+    "@remix-run/eslint-config": "experimental-netlify-edge",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
     "eslint": "^8.11.0",
