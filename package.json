@@ -13,6 +13,7 @@
     "@netlify/functions": "latest",
     "@remix-run/netlify-edge": "experimental-netlify-edge",
     "@remix-run/react": "experimental-netlify-edge",
+    "@remix-run/server-runtime": "experimental-netlify-edge",
     "cross-env": "^7.0.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
@@ -24,9 +25,6 @@
     "@types/react-dom": "^18.0.1",
     "eslint": "^8.11.0",
     "typescript": "^4.5.5"
-  },
-  "peerDependencies": {
-    "@remix-run/server-runtime": "*"
   },
   "engines": {
     "node": ">=14"
