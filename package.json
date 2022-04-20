@@ -15,14 +15,14 @@
     "@remix-run/react": "experimental-netlify-edge",
     "@remix-run/server-runtime": "experimental-netlify-edge",
     "cross-env": "^7.0.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@remix-run/dev": "experimental-netlify-edge",
     "@remix-run/eslint-config": "experimental-netlify-edge",
-    "@types/react": "^18.0.5",
-    "@types/react-dom": "^18.0.1",
+    "@types/react": "^17.0.44",
+    "@types/react-dom": "^17.0.15",
     "eslint": "^8.11.0",
     "typescript": "^4.5.5"
   },
