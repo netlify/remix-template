@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = ({ isTypeScript, rootDirectory }) => {
-  if (isTypeScript === false) {
+  if (!isTypeScript) {
     let remixConfigPath = path.join(rootDirectory, "remix.config.js");
     let remixConfig = require(remixConfigPath);
     remixConfig.server = "./server.js";
