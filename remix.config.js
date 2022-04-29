@@ -3,6 +3,6 @@
  */
 module.exports = {
   serverBuildTarget: "netlify-edge",
-  server: "./server.ts",
+  server: "./server.js",
   ignoredRouteFiles: [".*"],
 };
