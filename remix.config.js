@@ -3,6 +3,9 @@
  */
 module.exports = {
   serverBuildTarget: "netlify-edge",
-  server: "./server.js",
+  server:
+    process.env.NETLIFY || process.env.NETLIFY_LOCAL
+      ? './server.js'
+      : undefined,
   ignoredRouteFiles: [".*"],
 };
