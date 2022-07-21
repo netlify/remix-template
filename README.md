@@ -61,5 +61,5 @@ There are two ways to deploy your app to Netlify, you can either link your app t
 netlify deploy --build
 
 # production deployment
-netlify deploy --build --prodnpx
+netlify deploy --build --prod
 ```
