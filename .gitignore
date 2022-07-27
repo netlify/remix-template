@@ -1,6 +1,12 @@
 node_modules
+yarn-error.log
 
 /.cache
 /public/build
 /.netlify
 .env
+
+.DS_Store
+sanity.json
+
+.resources

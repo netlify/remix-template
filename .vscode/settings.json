@@ -8,5 +8,6 @@
   ],
   "deno.unstable": true,
   "deno.importMap": ".netlify/edge-functions-import-map.json",
-  "deno.internalDebug": false
+  "deno.internalDebug": false,
+  "deno.enable": true
 }
