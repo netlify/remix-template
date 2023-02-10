@@ -23,7 +23,7 @@ async function modifyFilesForEdge(files, rootDirectory) {
     contents.map((content, index) => {
       const newContent = content.replace(
         /@remix-run\/node/g,
-        "@remix-run/deno"
+        "@netlify/remix-runtime"
       );
       return fs.writeFile(filePaths[index], newContent);
     })
