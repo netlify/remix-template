@@ -8,7 +8,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "ES2019",
+    "skipLibCheck": true,
     "strict": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]

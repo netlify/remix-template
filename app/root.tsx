@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/server-runtime";
+import type { MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
