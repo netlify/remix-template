@@ -1,3 +1,20 @@
+export function headers({
+  loaderHeaders,
+  parentHeaders,
+}: {
+  loaderHeaders: Headers;
+  parentHeaders: Headers;
+}) {
+  console.log(
+    "This is an example of using a cache header in the index route. This will cache the request for 60 seconds."
+  );
+  return {
+    // This is an example of how to set caching headers for a route
+    // For more info on headers in Remix, see: https://remix.run/docs/en/v1/route/headers
+    "Cache-Control": "public, max-age=60, s-maxage=60",
+  };
+}
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
