@@ -6,7 +6,7 @@ export function headers({
   parentHeaders: Headers;
 }) {
   console.log(
-    "This is an example of using a cache header in the index route. This will cache the request for 60 seconds."
+    "This is an example of how to set caching headers for a route, feel free to change the value of 60 seconds or remove the header"
   );
   return {
     // This is an example of how to set caching headers for a route
@@ -44,6 +44,6 @@ export default function Index() {
           </a>
         </li>
       </ul>
-    </div>
+    </main>
   );
 }
