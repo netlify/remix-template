@@ -3,6 +3,8 @@ const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
 
+const foldersToExclude = [".github"];
+
 const filesToCopy = [
   ["README.md"],
   ["netlify.toml"],
@@ -68,7 +70,28 @@ async function updatePackageJsonForEdge(directory) {
   await packageJson.save();
 }
 
+async function removeNonTemplateFiles({ rootDirectory, folders }) {
+  try {
+    await Promise.allSettled(
+      folders.map((folder) =>
+        fs.rm(join(rootDirectory, folder), { recursive: true })
+      )
+    );
+  } catch (e) {
+    console.log(
+      `Unable to remove folders ${folders.join(
+        ", "
+      )}. You can remove them manually.`
+    );
+  }
+}
+
 async function main({ rootDirectory }) {
+  await removeNonTemplateFiles({
+    rootDirectory,
+    folders: foldersToExclude,
+  });
+
   if (!(await shouldUseEdge())) {
     return;
   }
