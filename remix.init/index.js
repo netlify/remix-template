@@ -5,13 +5,15 @@ const PackageJson = require("@npmcli/package-json");
 
 const foldersToExclude = [".github"];
 
-const filesToCopy = [
-  ["README.md"],
-  ["netlify.toml"],
+const edgeFilesToCopy = [
+  ["README-edge.md", "README.md"],
+  ["netlify-edge.toml", "netlify.toml"],
   ["server.js"],
   ["remix.config.js"],
   ["vscode.json", join(".vscode", "settings.json")],
 ];
+
+const filesToCopy = [["README.md"], ["netlify.toml"]];
 
 const filesToModify = ["app/entry.server.tsx", "app/root.tsx"];
 
@@ -32,7 +34,7 @@ async function modifyFilesForEdge(files, rootDirectory) {
   );
 }
 
-async function copyEdgeTemplateFiles(files, rootDirectory) {
+async function copyTemplateFiles(files, rootDirectory) {
   for (const [file, target] of files) {
     await fs.copyFile(
       join(rootDirectory, "remix.init", file),
@@ -93,12 +95,14 @@ async function main({ rootDirectory }) {
   });
 
   if (!(await shouldUseEdge())) {
+    copyTemplateFiles(filesToCopy, rootDirectory);
+
     return;
   }
 
   await Promise.all([
     fs.mkdir(join(rootDirectory, ".vscode")),
-    copyEdgeTemplateFiles(filesToCopy, rootDirectory),
+    copyTemplateFiles(edgeFilesToCopy, rootDirectory),
   ]);
 
   await Promise.all([
