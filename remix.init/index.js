@@ -74,7 +74,7 @@ async function removeNonTemplateFiles({ rootDirectory, folders }) {
   try {
     await Promise.allSettled(
       folders.map((folder) =>
-        fs.rm(join(rootDirectory, folder), { recursive: true })
+        fs.rm(join(rootDirectory, folder), { recursive: true, force: true })
       )
     );
   } catch (e) {
