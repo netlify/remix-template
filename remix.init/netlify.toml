@@ -11,4 +11,5 @@ status = 200
 for = "/build/*"
 
 [headers.values]
-"Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
+# Set to 60 seconds as an example. You can also add cache headers via Remix. See the documentation on [headers](https://remix.run/docs/en/v1/route/headers) in Remix.
+"Cache-Control" = "public, max-age=60, s-maxage=60"
