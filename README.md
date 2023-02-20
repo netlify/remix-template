@@ -2,6 +2,10 @@
 
 Welcome to the Netlify Remix Template project.
 
+This project includes:
+- Netlify Functions template for Remix sites
+- Netlify Edge Functions template for Remix sites
+
 ## Development
 
 There is no need to run `npm install` as this is a template. The Remix CLI will install the dependencies for you. Make changes to files as you see fit. If there are transformations for files for either the Netlify Functions or Netlify Edge Functions template, make the appropriate changes to the `remix.init/index.js` file.
