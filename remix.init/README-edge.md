@@ -5,7 +5,7 @@
 
 ## Netlify Setup
 
-1. Install the [Netlify CLI](https://www.netlify.com/products/dev/):
+1. Install the [Netlify CLI](https://docs.netlify.com/cli/get-started/):
 
 ```sh
 npm i -g netlify-cli
