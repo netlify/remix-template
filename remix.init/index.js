@@ -123,7 +123,7 @@ async function shouldUseEdge() {
           value: false,
         },
         {
-          name: "Netlify Edge Functions (beta) - Try this for improved performance on non-critical sites",
+          name: "Netlify Edge Functions (beta) - Try this for improved performance on less critical sites",
           value: true,
         },
       ],
