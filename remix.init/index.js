@@ -11,7 +11,7 @@ const edgeFilesToCopy = [
   ["server.js"],
   ["remix.config.js"],
   ["entry.server.tsx", "app/entry.server.tsx"],
-  ["vscode.json", join(".vscode", "settings.json")],
+  ["vscode.json", ".vscode/settings.json"],
 ];
 
 const filesToCopy = [["README.md"], ["netlify.toml"]];
