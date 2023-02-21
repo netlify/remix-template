@@ -10,6 +10,7 @@ const edgeFilesToCopy = [
   ["netlify-edge.toml", "netlify.toml"],
   ["server.js"],
   ["remix.config.js"],
+  ["entry.server.tsx", "app/entry.server.tsx"],
   ["vscode.json", join(".vscode", "settings.json")],
 ];
 
@@ -66,6 +67,7 @@ async function updatePackageJsonForEdge(directory) {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
       "@netlify/remix-edge-adapter": "1.0.0",
+      isbot: "^3.6.6",
     },
   });
 
