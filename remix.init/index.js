@@ -26,7 +26,6 @@ function convertToJsExtension(file) {
 }
 
 async function copyTemplateFiles({ files, rootDirectory, isTypeScript }) {
-  debugger;
   for (const [file, target] of files) {
     let sourceFile = file;
     let targetFile = target || file;
