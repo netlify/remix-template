@@ -1,7 +1,7 @@
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
-- [Netlify Edge Functions Overview](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions)
+- [Netlify Edge Functions Overview](https://docs.netlify.com/edge-functions/overview/)
 
 ## Netlify Setup
 
