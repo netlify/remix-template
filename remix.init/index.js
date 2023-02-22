@@ -3,7 +3,7 @@ const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
 
-const foldersToExclude = [".github"];
+const foldersToExclude = [".github", ".git"];
 
 // Netlify Edge Functions template file changes
 const edgeFilesToCopy = [
