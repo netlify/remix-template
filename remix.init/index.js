@@ -109,6 +109,24 @@ async function main({ rootDirectory, isTypeScript }) {
   ]);
 
   await updatePackageJsonForEdge(rootDirectory);
+
+  // This is temporary as a workaround for a bug I encountered with the Remix CLI
+  // import isbot from "isbot" converts to const isbot = require("isbot").default
+  // instead of to const isbot = require("isbot")
+  //
+  // Remove this if the issue in the Remix CLI gets sorted.
+  (async () => {
+    if (!isTypeScript) {
+      const path = join(rootDirectory, "/app/entry.server.jsx");
+      const contents = await fs.readFile(path, "utf8");
+      const newContent = contents.replace(
+        `require("isbot").default`,
+        `require("isbot")`
+      );
+
+      await fs.writeFile(path, newContent);
+    }
+  })();
 }
 
 async function shouldUseEdge() {
