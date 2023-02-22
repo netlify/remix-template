@@ -5,41 +5,43 @@ const PackageJson = require("@npmcli/package-json");
 
 const foldersToExclude = [".github"];
 
+// Netlify Edge Functions template file changes
 const edgeFilesToCopy = [
   ["README-edge.md", "README.md"],
   ["netlify-edge-toml", "netlify.toml"],
   ["server.js"],
   ["remix.config.js"],
   ["entry.server.tsx", "app/entry.server.tsx"],
+  ["root.tsx", "app/root.tsx"],
   ["vscode.json", ".vscode/settings.json"],
 ];
 
+// Netlify Functions template file changes
 const filesToCopy = [["README.md"], ["netlify-toml", "netlify.toml"]];
 
-const filesToModify = ["app/entry.server.tsx", "app/root.tsx"];
+const tsExtensionMatcher = /\.ts(x?)$/;
 
-async function modifyFilesForEdge(files, rootDirectory) {
-  const filePaths = files.map((file) => join(rootDirectory, file));
-  const contents = await Promise.all(
-    filePaths.map((path) => fs.readFile(path, "utf8"))
-  );
-
-  await Promise.all(
-    contents.map((content, index) => {
-      const newContent = content.replace(
-        /@remix-run\/node/g,
-        "@netlify/remix-runtime"
-      );
-      return fs.writeFile(filePaths[index], newContent);
-    })
-  );
+function convertToJsExtension(file) {
+  return file.replace(tsExtensionMatcher, ".js$1");
 }
 
-async function copyTemplateFiles(files, rootDirectory) {
+async function copyTemplateFiles({ files, rootDirectory, isTypeScript }) {
+  debugger;
   for (const [file, target] of files) {
+    let sourceFile = file;
+    let targetFile = target || file;
+
+    // change the target file extension .tsx to .jsx only if the project has been converted to JavaScript
+    if (!isTypeScript && file.match(tsExtensionMatcher)) {
+      // If they chose JavaScript, the source file is converted to .js or .jsx and
+      // we need the target file to be .js or .jsx for the same reason.
+      sourceFile = convertToJsExtension(file);
+      targetFile = convertToJsExtension(targetFile);
+    }
+
     await fs.copyFile(
-      join(rootDirectory, "remix.init", file),
-      join(rootDirectory, target || file)
+      join(rootDirectory, "remix.init", sourceFile),
+      join(rootDirectory, targetFile)
     );
   }
 }
@@ -90,27 +92,24 @@ async function removeNonTemplateFiles({ rootDirectory, folders }) {
   }
 }
 
-async function main({ rootDirectory }) {
+async function main({ rootDirectory, isTypeScript }) {
   await removeNonTemplateFiles({
     rootDirectory,
     folders: foldersToExclude,
   });
 
   if (!(await shouldUseEdge())) {
-    copyTemplateFiles(filesToCopy, rootDirectory);
+    copyTemplateFiles({ files: filesToCopy, rootDirectory, isTypeScript });
 
     return;
   }
 
   await Promise.all([
     fs.mkdir(join(rootDirectory, ".vscode")),
-    copyTemplateFiles(edgeFilesToCopy, rootDirectory),
+    copyTemplateFiles({ files: edgeFilesToCopy, rootDirectory, isTypeScript }),
   ]);
 
-  await Promise.all([
-    modifyFilesForEdge(filesToModify, rootDirectory),
-    updatePackageJsonForEdge(rootDirectory),
-  ]);
+  await updatePackageJsonForEdge(rootDirectory);
 }
 
 async function shouldUseEdge() {
