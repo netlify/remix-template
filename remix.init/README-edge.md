@@ -47,6 +47,25 @@ Open up [http://localhost:3000](http://localhost:3000), and you should be ready 
 
 Note: When running the Netlify CLI, file changes will rebuild assets, but you will not see the changes to the page you are on unless you do a browser refresh of the page. Due to how the Netlify CLI builds the Remix App Server, it does not support hot module reloading.
 
+### Excluding routes
+
+If you want to exclude routes for non-Remix code, e.g. for custom Netlify Functions or Netlify Edge Functions, add an additional entry in the array, e.g.:
+
+```diff
+export const config = {
+  cache: "manual",
+  path: "/*",
+  // Let the CDN handle requests for static assets, i.e. /_assets/*
+  //
+  // Add other exclusions here, e.g. "/api/*" for custom Netlify functions or
+  // custom Netlify Edge Functions
+-  excluded_patterns: ["/_assets/*"],
++  excluded_patterns: ["/_assets/*", "/api/*"],
+};
+```
+
+These changes can be made in [server.js](./server.js).
+
 ## Deployment
 
 There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
