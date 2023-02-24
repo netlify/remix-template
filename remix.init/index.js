@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
+const execa = require("execa");
 
 const foldersToExclude = [".github", ".git"];
 
@@ -131,6 +132,17 @@ async function main({ rootDirectory, isTypeScript }) {
       await fs.writeFile(path, newContent);
     }
   })();
+
+  // The Netlify Edge Functions template has different and additional dependencies to install.
+  try {
+    console.log("installing additional npm packages for...");
+    const npmInstall = await execa("npm", ["install"], { cwd: rootDirectory });
+    console.log(npmInstall.stdout);
+  } catch (e) {
+    console.log(
+      `Unable to install additional packages. Run npm install in the root of the new project, "${rootDirectory}".`
+    );
+  }
 }
 
 async function shouldUseEdge() {
