@@ -98,7 +98,11 @@ async function main({ rootDirectory, isTypeScript }) {
   });
 
   if (!(await shouldUseEdge())) {
-    copyTemplateFiles({ files: filesToCopy, rootDirectory, isTypeScript });
+    await copyTemplateFiles({
+      files: filesToCopy,
+      rootDirectory,
+      isTypeScript,
+    });
 
     return;
   }
