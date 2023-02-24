@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@netlify/remix-runtime";
 import {
   Links,
   LiveReload,
