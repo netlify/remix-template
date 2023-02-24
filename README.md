@@ -2,7 +2,14 @@
 
 Welcome to the Netlify Remix Template project.
 
+To use the template, run
+
+```bash
+npx create-remix --template netlify/remix-template
+```
+
 This project includes:
+
 - Netlify Functions template for Remix sites
 - Netlify Edge Functions template for Remix sites
 
