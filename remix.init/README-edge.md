@@ -49,7 +49,7 @@ Note: When running the Netlify CLI, file changes will rebuild assets, but you wi
 
 ### Excluding routes
 
-If you want to exclude routes for non-Remix code, e.g. for custom Netlify Functions or Netlify Edge Functions, add an additional entry in the array, e.g.:
+You can exclude routes for non-Remix code such as custom Netlify Functions or Edge Functions. To do this, add an additional entry in the array like in the example below:
 
 ```diff
 export const config = {
