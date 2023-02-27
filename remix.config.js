@@ -12,8 +12,7 @@ const baseConfig =
 module.exports = {
   ...baseConfig,
   ignoredRouteFiles: ["**/.*"],
-  // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
-  // serverBuildPath: ".netlify/functions-internal/server.js",
-  // publicPath: "/build/",
+  // add your own custom config here if you want to.
+  //
+  // See https://remix.run/docs/en/v1/file-conventions/remix-config
 };
