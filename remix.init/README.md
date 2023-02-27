@@ -31,16 +31,27 @@ netlify init
 
 ## Development
 
+### Using the Remix Dev Server
+
 Ensure all packages are installed by running:
 
 ```sh
 npm install
 ```
 
-The Netlify CLI starts your app in development mode, rebuilding assets on file changes.
+The Remix dev server starts your app in development mode, rebuilding assets on file changes.
 
 ```sh
 npm run dev
+```
+
+### Using the Netlify CLI
+
+Run
+
+```sh
+netlify build
+netlify dev
 ```
 
 Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
