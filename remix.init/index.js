@@ -135,7 +135,7 @@ async function main({ rootDirectory, isTypeScript }) {
 
   // The Netlify Edge Functions template has different and additional dependencies to install.
   try {
-    console.log("installing additional npm packages for...");
+    console.log("installing additional npm packages...");
     const npmInstall = await execa("npm", ["install"], { cwd: rootDirectory });
     console.log(npmInstall.stdout);
   } catch (e) {
