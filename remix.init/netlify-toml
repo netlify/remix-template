@@ -1,19 +1,16 @@
 [build]
-command = "remix build"
+command = "remix build && cp _custom_redirects public/_redirects"
 publish = "public"
 
 [dev]
-command = "remix watch"
-port = 3000
-
-[[redirects]]
-from = "/*"
-to = "/.netlify/functions/server"
-status = 200
+command = "npm run dev"
+targetPort = 3000
 
 [[headers]]
 for = "/build/*"
 
 [headers.values]
+
 # Set to 60 seconds as an example. You can also add cache headers via Remix. See the documentation on [headers](https://remix.run/docs/en/v1/route/headers) in Remix.
+
 "Cache-Control" = "public, max-age=60, s-maxage=60"

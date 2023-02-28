@@ -1,9 +1,9 @@
 const baseConfig =
-  process.env.NETLIFY || process.env.NETLIFY_LOCAL
+  process.env.NODE_ENV === "production"
     ? // when running the Netify CLI or building on Netlify, we want to use
       {
-        serverBuildTarget: "netlify",
         server: "./server.js",
+        serverBuildPath: ".netlify/functions-internal/server.js",
       }
     : // otherwise support running remix dev, i.e. no custom server
       undefined;
