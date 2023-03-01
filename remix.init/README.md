@@ -50,13 +50,14 @@ npm run dev
 Run
 
 ```sh
-netlify build
 netlify dev
 ```
 
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
+Open up [http://localhost:8888](http://localhost:8888), and you should be ready to go!
 
-Note: When running the Netlify CLI, file changes will rebuild assets, but you will not see the changes to the page you are on unless you do a browser refresh of the page. Due to how the Netlify CLI builds the Remix App Server, it does not support hot module reloading.
+### Adding Redirects and Rewrites
+
+To add redirects and rewrites, you can add them to the `netlify.toml` file or to the [_custom_redirects](_custom_redirects) file. When running `ntl serve` or if deploying your site, the _custom_redirects file will be copied and renamed to _redirects to your publish folder.
 
 ## Deployment
 
