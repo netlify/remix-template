@@ -3,7 +3,7 @@
 # pages when running `netlify dev` if it is in the netlify.toml file or a _redirects file.
 # The build step will copy this file to the publish directory for your application and rename it to _redirects
 # so that it will be used by Netlify when your site is deployed.
-# Do not remove. This is required to serve the site when deployed
+# Do not remove. This file is required to serve the site when deployed.
 
 /* /.netlify/functions/server 200
 
