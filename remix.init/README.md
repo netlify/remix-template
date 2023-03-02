@@ -31,21 +31,11 @@ netlify init
 
 ## Development
 
-### Using the Remix Dev Server
-
 Ensure all packages are installed by running:
 
 ```sh
 npm install
 ```
-
-The Remix dev server starts your app in development mode, rebuilding assets on file changes.
-
-```sh
-npm run dev
-```
-
-### Using the Netlify CLI
 
 Run
 
@@ -53,11 +43,21 @@ Run
 netlify dev
 ```
 
-Open up [http://localhost:8888](http://localhost:8888), and you should be ready to go!
+Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
 
 ### Adding Redirects and Rewrites
 
-To add redirects and rewrites, you can add them to the `netlify.toml` file or to the [_custom_redirects](_custom_redirects) file. When running `ntl serve` or if deploying your site, the _custom_redirects file will be copied and renamed to _redirects to your publish folder.
+To add redirects and rewrites, add them to the `netlify.toml` file or to the [\_app_redirects](_app_redirects) file.
+
+### Serve your site locally
+
+Run
+
+```sh
+npm run start
+```
+
+to serve your site locally at [http://localhost:8888](http://localhost:8888).
 
 ## Deployment
 

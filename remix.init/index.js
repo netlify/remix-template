@@ -21,7 +21,7 @@ const edgeFilesToCopy = [
 const filesToCopy = [
   ["README.md"],
   ["netlify-toml", "netlify.toml"],
-  ["_custom_redirects"],
+  ["_app_redirects"],
 ];
 
 const tsExtensionMatcher = /\.ts(x?)$/;

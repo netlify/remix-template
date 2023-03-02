@@ -1,0 +1,10 @@
+# This file is being used instead of the typical Netlify _redirects file in the root of your application
+# Because /* /.netlify/functions/server 200 will cause the Remix dev server to not serve
+# pages when running `netlify dev` if it is in the netlify.toml file or a _redirects file.
+# The build step will copy this file to the publish directory for your application and rename it to _redirects
+# so that it will be used by Netlify when your site is deployed.
+# Do not remove. This is required to serve the site when deployed
+
+/* /.netlify/functions/server 200
+
+# Add other redirects and rewrites here and/or in your netlify.toml
