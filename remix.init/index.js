@@ -18,7 +18,11 @@ const edgeFilesToCopy = [
 ];
 
 // Netlify Functions template file changes
-const filesToCopy = [["README.md"], ["netlify-toml", "netlify.toml"]];
+const filesToCopy = [
+  ["README.md"],
+  ["netlify-toml", "netlify.toml"],
+  ["_app_redirects"],
+];
 
 const tsExtensionMatcher = /\.ts(x?)$/;
 

@@ -37,15 +37,27 @@ Ensure all packages are installed by running:
 npm install
 ```
 
-The Netlify CLI starts your app in development mode, rebuilding assets on file changes.
+Run
 
 ```sh
-npm run dev
+netlify dev
 ```
 
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
+Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
 
-Note: When running the Netlify CLI, file changes will rebuild assets, but you will not see the changes to the page you are on unless you do a browser refresh of the page. Due to how the Netlify CLI builds the Remix App Server, it does not support hot module reloading.
+### Adding Redirects and Rewrites
+
+To add redirects and rewrites, add them to the `netlify.toml` file or to the [\_app_redirects](_app_redirects) file. For more information about redirects and rewrites, see the [Netlify docs](https://docs.netlify.com/routing/redirects/).
+
+### Serve your site locally
+
+Run
+
+```sh
+npm run start
+```
+
+to serve your site locally at [http://localhost:8888](http://localhost:8888).
 
 ## Deployment
 

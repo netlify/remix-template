@@ -1,11 +1,10 @@
 [build]
-command = "remix build"
+command = "remix build && cp _app_redirects public/_redirects"
 publish = "public"
 
-[[redirects]]
-from = "/*"
-to = "/.netlify/functions/server"
-status = 200
+[dev]
+command = "npm run dev"
+targetPort = 3000
 
 [[headers]]
 for = "/build/*"
