@@ -47,7 +47,7 @@ Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
 
 ### Adding Redirects and Rewrites
 
-To add redirects and rewrites, add them to the `netlify.toml` file or to the [\_app_redirects](_app_redirects) file.
+To add redirects and rewrites, add them to the `netlify.toml` file or to the [\_app_redirects](_app_redirects) file. For more information about redirects and rewrites, see the [Netlify docs](https://docs.netlify.com/routing/redirects/).
 
 ### Serve your site locally
 
