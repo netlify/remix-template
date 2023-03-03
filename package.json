@@ -3,6 +3,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
+    "predev": "rimraf ./public/_redirects",
     "dev": "remix dev",
     "start": "netlify serve",
     "typecheck": "tsc -b"
@@ -23,6 +24,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "eslint": "^8.27.0",
+    "rimraf": "^4.1.4",
     "typescript": "^4.8.4"
   },
   "engines": {
