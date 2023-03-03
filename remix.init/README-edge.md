@@ -55,6 +55,22 @@ npm netlify serve
 
 to serve your site locally at [http://localhost:8888](http://localhost:8888).
 
+## Excluding routes
+
+You can exclude routes for non-Remix code such as custom Netlify Functions or Edge Functions. To do this, add an additional entry in the array like in the example below:
+
+````diff
+export const config = {
+  cache: "manual",
+  path: "/*",
+  // Let the CDN handle requests for static assets, i.e. /_assets/*
+  //
+  // Add other exclusions here, e.g. "/api/*" for custom Netlify functions or
+  // custom Netlify Edge Functions
+-  excluded_patterns: ["/_assets/*"],
++  excluded_patterns: ["/_assets/*", "/api/*"],
+};
+
 ## Deployment
 
 There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
@@ -65,4 +81,4 @@ netlify deploy --build
 
 # production deployment
 netlify deploy --build --prod
-```
+````
