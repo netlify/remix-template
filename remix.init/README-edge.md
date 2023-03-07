@@ -37,21 +37,29 @@ Ensure all packages are installed by running:
 npm install
 ```
 
-The Netlify CLI starts your app in development mode, rebuilding assets on file changes.
+Run
 
 ```sh
-npm run dev
+netlify dev
 ```
 
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
+Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
 
-Note: When running the Netlify CLI, file changes will rebuild assets, but you will not see the changes to the page you are on unless you do a browser refresh of the page. Due to how the Netlify CLI builds the Remix App Server, it does not support hot module reloading.
+### Serve your site locally
 
-### Excluding routes
+Run
+
+```sh
+npm netlify serve
+```
+
+to serve your site locally at [http://localhost:8888](http://localhost:8888).
+
+## Excluding routes
 
 You can exclude routes for non-Remix code such as custom Netlify Functions or Edge Functions. To do this, add an additional entry in the array like in the example below:
 
-```diff
+````diff
 export const config = {
   cache: "manual",
   path: "/*",
@@ -62,9 +70,6 @@ export const config = {
 -  excluded_patterns: ["/_assets/*"],
 +  excluded_patterns: ["/_assets/*", "/api/*"],
 };
-```
-
-These changes can be made in [server.js](./server.js).
 
 ## Deployment
 
@@ -76,4 +81,4 @@ netlify deploy --build
 
 # production deployment
 netlify deploy --build --prod
-```
+````

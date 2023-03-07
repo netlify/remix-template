@@ -66,14 +66,13 @@ async function updatePackageJsonForEdge(directory) {
     // dev script is the same as the start script for Netlify Edge, "cross-env NODE_ENV=production netlify dev"
     scripts: {
       ...scripts,
-      dev: scripts["start"],
+      predev: "rimraf ./.netlify/edge-functions/",
     },
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
       "@netlify/remix-edge-adapter": "1.0.0",
-      isbot: "^3.6.6",
     },
   });
 

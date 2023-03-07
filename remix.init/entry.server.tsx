@@ -1,31 +1,22 @@
-import type { EntryContext } from "@remix-run/server-runtime";
+import type { EntryContext } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
-import { renderToReadableStream } from "react-dom/server";
-import isbot from "isbot";
+// Looking to use renderReadableStream? See https://github.com/netlify/remix-template/discussions/100
+import { renderToString } from "react-dom/server";
 
-export default async function handleRequest(
+export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  const body = await renderToReadableStream(
-    <RemixServer context={remixContext} url={request.url} />,
-    {
-      onError() {
-        responseStatusCode = 500;
-      },
-    }
+  const markup = renderToString(
+    <RemixServer context={remixContext} url={request.url} />
   );
-
-  if (isbot(request.headers.get("user-agent"))) {
-    await body.allReady;
-  }
 
   responseHeaders.set("Content-Type", "text/html");
 
-  return new Response(body, {
-    status: responseStatusCode,
+  return new Response("<!DOCTYPE html>" + markup, {
     headers: responseHeaders,
+    status: responseStatusCode,
   });
 }
