@@ -12,6 +12,10 @@ const baseConfig =
 module.exports = {
   ...baseConfig,
   ignoredRouteFiles: ["**/.*"],
+  // See https://remix.run/docs/en/main/file-conventions/route-files-v2
+  future: {
+    v2_routeConvention: true,
+  },
   // add your own custom config here if you want to.
   //
   // See https://remix.run/docs/en/v1/file-conventions/remix-config
