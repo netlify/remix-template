@@ -11,9 +11,9 @@ export default createRequestHandler({
 export const config = {
   cache: "manual",
   path: "/*",
-  // Let the CDN handle requests for static assets, i.e. /_assets/*
+  // Let the CDN handle requests for static assets, i.e. ^/_assets/*$
   //
-  // Add other exclusions here, e.g. "/api/*" for custom Netlify functions or
+  // Add other exclusions here, e.g. "^/api/*$" for custom Netlify functions or
   // custom Netlify Edge Functions
-  excluded_patterns: ["/_assets/*"],
+  excluded_patterns: ["^/_assets/*$"],
 };
