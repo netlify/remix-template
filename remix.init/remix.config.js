@@ -2,7 +2,7 @@ const { config } = require("@netlify/remix-edge-adapter");
 const baseConfig =
   process.env.NODE_ENV === "production"
     ? config
-    : { ignoredRouteFiles: ["**/.*"] };
+    : { ignoredRouteFiles: ["**/.*"], future: config.future };
 
 /**
  * @type {import('@remix-run/dev').AppConfig}
