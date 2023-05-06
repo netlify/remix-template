@@ -6,25 +6,24 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "netlify serve",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@remix-run/node": "*",
+    "@remix-run/css-bundle": "*",
     "@remix-run/react": "*",
-    "cross-env": "^7.0.3",
+    "@remix-run/serve": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "*",
     "@remix-run/eslint-config": "*",
-    "@remix-run/serve": "*",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "eslint": "^8.27.0",
+    "@types/react": "^18.2.34",
+    "@types/react-dom": "^18.2.14",
+    "eslint": "^8.52.0",
     "typescript": "^5.2.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.0.0"
   }
 }

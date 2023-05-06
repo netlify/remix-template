@@ -1,29 +1,23 @@
-const inquirer = require("inquirer");
-const fs = require("fs/promises");
-const { join } = require("path");
+const fs = require("node:fs/promises");
+const { join } = require("node:path");
 const PackageJson = require("@npmcli/package-json");
-const execa = require("execa");
 const { Command } = require("commander");
+const execa = require("execa");
+const inquirer = require("inquirer");
 
 const foldersToExclude = [".github"];
 
 // Netlify Edge Functions template file changes
 const edgeFilesToCopy = [
   ["README-edge.md", "README.md"],
-  ["netlify-edge-toml", "netlify.toml"],
+  ["netlify-edge.toml", "netlify.toml"],
   ["server.ts"],
   ["remix.config.js"],
-  ["entry.server.tsx", "app/entry.server.tsx"],
-  ["root.tsx", "app/root.tsx"],
   ["vscode.json", ".vscode/settings.json"],
 ];
 
 // Netlify Functions template file changes
-const filesToCopy = [
-  ["README.md"],
-  ["netlify-toml", "netlify.toml"],
-  ["redirects", ".redirects"],
-];
+const filesToCopy = [["README.md"], ["netlify.toml"], [".redirects"]];
 
 async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
@@ -39,24 +33,20 @@ async function copyTemplateFiles({ files, rootDirectory }) {
 
 async function updatePackageJsonForEdge(directory) {
   const packageJson = await PackageJson.load(directory);
-  const {
-    dependencies: { "@remix-run/node": _node, ...dependencies },
-    scripts,
-    ...restOfPackageJson
-  } = packageJson.content;
+  const { dependencies, scripts, ...restOfPackageJson } = packageJson.content;
 
   packageJson.update({
-    // dev script is the same as the start script for Netlify Edge, "cross-env NODE_ENV=production netlify dev"
-    scripts: {
-      ...scripts,
-      dev: 'remix dev --manual -c "ntl dev --framework=#static"',
-    },
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
       "@netlify/remix-edge-adapter": "^3.0.0",
       "@netlify/remix-runtime": "^2.0.0",
+    },
+    // dev script is the same as the start script for Netlify Edge, "cross-env NODE_ENV=production netlify dev"
+    scripts: {
+      ...scripts,
+      dev: 'remix dev --manual -c "ntl dev --framework=#static"',
     },
   });
 
@@ -65,26 +55,23 @@ async function updatePackageJsonForEdge(directory) {
 
 async function updatePackageJsonForFunctions(directory) {
   const packageJson = await PackageJson.load(directory);
-  const {
-    dependencies: { "@remix-run/node": _node, ...dependencies },
-    scripts,
-    ...restOfPackageJson
-  } = packageJson.content;
+  const { dependencies, scripts, ...restOfPackageJson } = packageJson.content;
 
   packageJson.update({
     ...restOfPackageJson,
+    dependencies: {
+      ...dependencies,
+      "@netlify/functions": "^2.0.0",
+      "@netlify/remix-adapter": "^2.0.0",
+      "source-map-support": "^0.5.21",
+      shx: "^0.3.4",
+    },
     scripts: {
       ...scripts,
       build: "npm run redirects:enable && remix build",
       dev: "npm run redirects:disable && remix dev",
       "redirects:enable": "shx cp .redirects public/_redirects",
       "redirects:disable": "shx rm -f public/_redirects",
-    },
-    dependencies: {
-      ...dependencies,
-      "@netlify/functions": "^2.0.0",
-      "@netlify/remix-adapter": "^2.0.0",
-      shx: "^0.3.4",
     },
   });
 
@@ -113,7 +100,7 @@ async function installAdditionalDependencies({
 }) {
   try {
     console.log(`Installing additional dependencies with ${packageManager}.`);
-    const npmInstall = await execa(packageManager, ["install"], {
+    await execa(packageManager, ["install"], {
       cwd: rootDirectory,
       stdio: "inherit",
     });

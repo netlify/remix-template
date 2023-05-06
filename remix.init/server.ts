@@ -1,6 +1,9 @@
-import * as build from "@remix-run/dev/server-build";
 import { createRequestHandler } from "@netlify/remix-edge-adapter";
 import { broadcastDevReady } from "@netlify/remix-runtime";
+import * as build from "@remix-run/dev/server-build";
+import sourceMapSupport from "source-map-support";
+
+sourceMapSupport.install();
 
 export default createRequestHandler({
   build,
