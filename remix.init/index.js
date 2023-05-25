@@ -156,11 +156,11 @@ async function shouldUseEdge() {
       message: "Run your Remix site with:",
       choices: [
         {
-          name: "Netlify Functions - Choose this for stable support for production sites",
+          name: "Netlify Functions",
           value: false,
         },
         {
-          name: "Netlify Edge Functions (beta) - Try this for improved performance on less critical sites",
+          name: "Netlify Edge Functions",
           value: true,
         },
       ],
