@@ -54,7 +54,6 @@ async function updatePackageJsonForEdge(directory) {
   const packageJson = await PackageJson.load(directory);
   const {
     dependencies: {
-      "@remix-run/netlify": _netlify,
       "@remix-run/node": _node,
       ...dependencies
     },
@@ -73,6 +72,28 @@ async function updatePackageJsonForEdge(directory) {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
       "@netlify/remix-edge-adapter": "1.2.0",
+    },
+  });
+
+  await packageJson.save();
+}
+
+async function updatePackageJsonForFunctions(directory) {
+  const packageJson = await PackageJson.load(directory);
+  const {
+    dependencies: {
+      "@remix-run/node": _node,
+      ...dependencies
+    },
+    scripts,
+    ...restOfPackageJson
+  } = packageJson.content;
+
+  packageJson.update({
+    ...restOfPackageJson,
+    dependencies: {
+      ...dependencies,
+      "@netlify/remix-adapter": "^1.0.0",
     },
   });
 
@@ -107,7 +128,7 @@ async function main({ rootDirectory, isTypeScript }) {
       rootDirectory,
       isTypeScript,
     });
-
+    await updatePackageJsonForFunctions(rootDirectory);
     return;
   }
 
