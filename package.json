@@ -2,7 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "remix build && cp _app_redirects public/_redirects",
+    "build": "remix build",
     "predev": "rimraf ./public/_redirects",
     "dev": "remix dev",
     "start": "netlify serve",
