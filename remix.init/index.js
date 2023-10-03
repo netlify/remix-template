@@ -24,24 +24,11 @@ const filesToCopy = [
   ["_app_redirects"],
 ];
 
-const tsExtensionMatcher = /\.ts(x?)$/;
 
-function convertToJsExtension(file) {
-  return file.replace(tsExtensionMatcher, ".js$1");
-}
-
-async function copyTemplateFiles({ files, rootDirectory, isTypeScript }) {
+async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
     let sourceFile = file;
     let targetFile = target || file;
-
-    // change the target file extension .tsx to .jsx only if the project has been converted to JavaScript
-    if (!isTypeScript && file.match(tsExtensionMatcher)) {
-      // If they chose JavaScript, the source file is converted to .js or .jsx and
-      // we need the target file to be .js or .jsx for the same reason.
-      sourceFile = convertToJsExtension(file);
-      targetFile = convertToJsExtension(targetFile);
-    }
 
     await fs.copyFile(
       join(rootDirectory, "remix.init", sourceFile),
@@ -116,7 +103,7 @@ async function removeNonTemplateFiles({ rootDirectory, folders }) {
   }
 }
 
-async function main({ rootDirectory, isTypeScript }) {
+async function main({ rootDirectory }) {
   await removeNonTemplateFiles({
     rootDirectory,
     folders: foldersToExclude,
@@ -126,7 +113,6 @@ async function main({ rootDirectory, isTypeScript }) {
     await copyTemplateFiles({
       files: filesToCopy,
       rootDirectory,
-      isTypeScript,
     });
     await updatePackageJsonForFunctions(rootDirectory);
     return;
@@ -134,28 +120,10 @@ async function main({ rootDirectory, isTypeScript }) {
 
   await Promise.all([
     fs.mkdir(join(rootDirectory, ".vscode")),
-    copyTemplateFiles({ files: edgeFilesToCopy, rootDirectory, isTypeScript }),
+    copyTemplateFiles({ files: edgeFilesToCopy, rootDirectory }),
   ]);
 
   await updatePackageJsonForEdge(rootDirectory);
-
-  // This is temporary as a workaround for a bug I encountered with the Remix CLI
-  // import isbot from "isbot" converts to const isbot = require("isbot").default
-  // instead of to const isbot = require("isbot")
-  //
-  // Remove this if the issue in the Remix CLI gets sorted.
-  (async () => {
-    if (!isTypeScript) {
-      const path = join(rootDirectory, "/app/entry.server.jsx");
-      const contents = await fs.readFile(path, "utf8");
-      const newContent = contents.replace(
-        `require("isbot").default`,
-        `require("isbot")`
-      );
-
-      await fs.writeFile(path, newContent);
-    }
-  })();
 
   // The Netlify Edge Functions template has different and additional dependencies to install.
   try {
