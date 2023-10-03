@@ -8,10 +8,13 @@ To use the template, run
 npx create-remix@latest --template netlify/remix-template
 ```
 
+
 This project includes:
 
 - Netlify Functions template for Remix sites
 - Netlify Edge Functions template for Remix sites
+
+From the `create-remix` command, you may pass `--netlify-edge` or `--no-netlify-edge` to generate a template that uses Netlify Edge or Serverless functions explicitly. Without passing this option, the create workflow will ask you which you would prefer.
 
 ## Development
 
