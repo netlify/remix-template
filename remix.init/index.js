@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
 const execa = require("execa");
+const { Command } = require('commander');
 
 const foldersToExclude = [".github", ".git"];
 
@@ -138,25 +139,38 @@ async function main({ rootDirectory }) {
 }
 
 async function shouldUseEdge() {
-  const { edge } = await inquirer.prompt([
-    {
-      name: "edge",
-      type: "list",
-      message: "Run your Remix site with:",
-      choices: [
-        {
-          name: "Netlify Functions",
-          value: false,
-        },
-        {
-          name: "Netlify Edge Functions",
-          value: true,
-        },
-      ],
-    },
-  ]);
 
-  return edge;
+  // parse the top level command args to see if edge was passed in
+  const program = new Command();
+  program
+    .option('--netlify-edge', 'explicitly use Netlify Edge Functions to serve this Remix site.', undefined)
+    .option('--no-netlify-edge', 'explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.', undefined)
+  program.allowUnknownOption().parse();
+
+  const passedEdgeOption = program.opts().netlifyEdge;
+
+  if(passedEdgeOption !== true && passedEdgeOption !== false){
+    const { edge } = await inquirer.prompt([
+      {
+        name: "edge",
+        type: "list",
+        message: "Run your Remix site with:",
+        choices: [
+          {
+            name: "Netlify Functions",
+            value: false,
+          },
+          {
+            name: "Netlify Edge Functions",
+            value: true,
+          },
+        ],
+      },
+    ]);
+    return edge;
+  }
+
+  return passedEdgeOption;
 }
 
 module.exports = main;
