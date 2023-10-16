@@ -3,7 +3,7 @@ const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
 const execa = require("execa");
-const { Command } = require('commander');
+const { Command } = require("commander");
 
 const foldersToExclude = [".github", ".git"];
 
@@ -19,12 +19,7 @@ const edgeFilesToCopy = [
 ];
 
 // Netlify Functions template file changes
-const filesToCopy = [
-  ["README.md"],
-  ["netlify-toml", "netlify.toml"],
-  ["_app_redirects"],
-];
-
+const filesToCopy = [["README.md"], ["netlify-toml"], ["_app_redirects"]];
 
 async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
@@ -41,10 +36,7 @@ async function copyTemplateFiles({ files, rootDirectory }) {
 async function updatePackageJsonForEdge(directory) {
   const packageJson = await PackageJson.load(directory);
   const {
-    dependencies: {
-      "@remix-run/node": _node,
-      ...dependencies
-    },
+    dependencies: { "@remix-run/node": _node, ...dependencies },
     scripts,
     ...restOfPackageJson
   } = packageJson.content;
@@ -54,12 +46,13 @@ async function updatePackageJsonForEdge(directory) {
     scripts: {
       ...scripts,
       predev: "rimraf ./.netlify/edge-functions/",
+      dev: 'remix dev --manual -c "ntl dev --framework=#static"',
     },
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
-      "@netlify/remix-edge-adapter": "1.2.0",
+      "@netlify/remix-edge-adapter": "^2.0.0",
     },
   });
 
@@ -69,10 +62,7 @@ async function updatePackageJsonForEdge(directory) {
 async function updatePackageJsonForFunctions(directory) {
   const packageJson = await PackageJson.load(directory);
   const {
-    dependencies: {
-      "@remix-run/node": _node,
-      ...dependencies
-    },
+    dependencies: { "@remix-run/node": _node, ...dependencies },
     scripts,
     ...restOfPackageJson
   } = packageJson.content;
@@ -81,6 +71,7 @@ async function updatePackageJsonForFunctions(directory) {
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
+      "@netlify/functions": "^2.0.0",
       "@netlify/remix-adapter": "^1.0.0",
     },
   });
@@ -139,17 +130,24 @@ async function main({ rootDirectory }) {
 }
 
 async function shouldUseEdge() {
-
   // parse the top level command args to see if edge was passed in
   const program = new Command();
   program
-    .option('--netlify-edge', 'explicitly use Netlify Edge Functions to serve this Remix site.', undefined)
-    .option('--no-netlify-edge', 'explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.', undefined)
+    .option(
+      "--netlify-edge",
+      "explicitly use Netlify Edge Functions to serve this Remix site.",
+      undefined
+    )
+    .option(
+      "--no-netlify-edge",
+      "explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.",
+      undefined
+    );
   program.allowUnknownOption().parse();
 
   const passedEdgeOption = program.opts().netlifyEdge;
 
-  if(passedEdgeOption !== true && passedEdgeOption !== false){
+  if (passedEdgeOption !== true && passedEdgeOption !== false) {
     const { edge } = await inquirer.prompt([
       {
         name: "edge",
