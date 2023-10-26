@@ -11,6 +11,3 @@ export default function handler(request: Request, context: Context) {
   return handle(request, context)
 }
 
-export const config: Config = {
-  path: '/*',
-}
