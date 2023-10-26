@@ -72,7 +72,7 @@ async function updatePackageJsonForFunctions(directory) {
     dependencies: {
       ...dependencies,
       "@netlify/functions": "^2.0.0",
-      "@netlify/remix-adapter": "^1.0.0",
+      "@netlify/remix-adapter": "^2.0.0",
     },
   });
 
