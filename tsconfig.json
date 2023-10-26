@@ -3,8 +3,6 @@
     "remix.env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "server.js",
-    "remix.init/server.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],

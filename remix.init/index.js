@@ -11,7 +11,7 @@ const foldersToExclude = [".github", ".git"];
 const edgeFilesToCopy = [
   ["README-edge.md", "README.md"],
   ["netlify-edge-toml", "netlify.toml"],
-  ["server.js"],
+  ["server.ts"],
   ["remix.config.js"],
   ["entry.server.tsx", "app/entry.server.tsx"],
   ["root.tsx", "app/root.tsx"],
