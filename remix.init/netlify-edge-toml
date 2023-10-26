@@ -5,7 +5,7 @@ publish = "public"
 # Set immutable caching for static files, because they have fingerprinted filenames
 
 [[headers]]
-for = "/build/\*"
+for = "/build/*"
 
 [headers.values]
 

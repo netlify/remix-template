@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "predev": "rimraf ./public/_redirects",
     "dev": "remix dev",
     "start": "netlify serve",
     "typecheck": "tsc -b"

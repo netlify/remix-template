@@ -40,10 +40,10 @@ npm install
 Run
 
 ```sh
-netlify dev
+npm run dev
 ```
 
-Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
+Open up [http://localhost:3000](http://localhost:3000), and you're ready to go!
 
 ### Adding Redirects and Rewrites
 

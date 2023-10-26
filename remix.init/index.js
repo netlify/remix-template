@@ -19,7 +19,7 @@ const edgeFilesToCopy = [
 ];
 
 // Netlify Functions template file changes
-const filesToCopy = [["README.md"], ["netlify-toml"], ["_app_redirects"]];
+const filesToCopy = [["README.md"], ["netlify-toml", "netlify.toml"]];
 
 async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
@@ -51,8 +51,9 @@ async function updatePackageJsonForEdge(directory) {
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
-      "@netlify/edge-functions": "^2.0.0",
-      "@netlify/remix-edge-adapter": "^3.0.0",
+      "@netlify/edge-functions": "^3.0.0",
+      "@netlify/remix-edge-adapter": "^2.0.0",
+      "@netlify/remix-runtime": "^2.0.0",
     },
   });
 
