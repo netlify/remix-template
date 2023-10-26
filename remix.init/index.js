@@ -52,7 +52,7 @@ async function updatePackageJsonForEdge(directory) {
     dependencies: {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
-      "@netlify/remix-edge-adapter": "^2.0.0",
+      "@netlify/remix-edge-adapter": "^3.0.0",
     },
   });
 
