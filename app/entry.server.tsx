@@ -30,6 +30,8 @@ export default function handleRequest(
       {
         onShellReady() {
           if (!bot) {
+            // Avoid a bug where responses aren't flushed if there's an outstanding timer.
+            clearTimeout(timer);
             shellRendered = true;
             responseHeaders.set("Content-Type", "text/html");
             resolve(
@@ -45,8 +47,6 @@ export default function handleRequest(
           reject(error);
         },
         onAllReady() {
-          // Avoid a bug where responses aren't flushed if there's an outstanding timer.
-          clearTimeout(timer);
           if (bot) {
             shellRendered = true;
             responseHeaders.set("Content-Type", "text/html");
