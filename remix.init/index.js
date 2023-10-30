@@ -5,7 +5,7 @@ const PackageJson = require("@npmcli/package-json");
 const execa = require("execa");
 const { Command } = require("commander");
 
-const foldersToExclude = [".github", ".git"];
+const foldersToExclude = [".github"];
 
 // Netlify Edge Functions template file changes
 const edgeFilesToCopy = [
@@ -51,7 +51,7 @@ async function updatePackageJsonForEdge(directory) {
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
-      "@netlify/edge-functions": "2.0.0",
+      "@netlify/edge-functions": "^2.0.0",
       "@netlify/remix-edge-adapter": "^3.0.0",
       "@netlify/remix-runtime": "^2.0.0",
     },
@@ -96,7 +96,24 @@ async function removeNonTemplateFiles({ rootDirectory, folders }) {
   }
 }
 
-async function main({ rootDirectory }) {
+async function installAdditionalDependencies({
+  rootDirectory,
+  packageManager,
+}) {
+  try {
+    console.log(`Installing additional dependencies with ${packageManager}.`);
+    const npmInstall = await execa(packageManager, ["install"], {
+      cwd: rootDirectory,
+      stdio: "inherit",
+    });
+  } catch (e) {
+    console.log(
+      `Unable to install additional packages. Run ${packageManager} install in the root of the new project, "${rootDirectory}".`
+    );
+  }
+}
+
+async function main({ rootDirectory, packageManager }) {
   await removeNonTemplateFiles({
     rootDirectory,
     folders: foldersToExclude,
@@ -108,6 +125,7 @@ async function main({ rootDirectory }) {
       rootDirectory,
     });
     await updatePackageJsonForFunctions(rootDirectory);
+    await installAdditionalDependencies({ rootDirectory, packageManager });
     return;
   }
 
@@ -118,16 +136,7 @@ async function main({ rootDirectory }) {
 
   await updatePackageJsonForEdge(rootDirectory);
 
-  // The Netlify Edge Functions template has different and additional dependencies to install.
-  try {
-    console.log("installing additional npm packages...");
-    const npmInstall = await execa("npm", ["install"], { cwd: rootDirectory });
-    console.log(npmInstall.stdout);
-  } catch (e) {
-    console.log(
-      `Unable to install additional packages. Run npm install in the root of the new project, "${rootDirectory}".`
-    );
-  }
+  await installAdditionalDependencies({ rootDirectory, packageManager });
 }
 
 async function shouldUseEdge() {
