@@ -40,7 +40,7 @@ npm install
 Run
 
 ```sh
-npm run dev
+netlify dev
 ```
 
 Open up [http://localhost:3000](http://localhost:3000), and you're ready to go!
@@ -58,7 +58,6 @@ npm run start
 ```
 
 Your site will be available at [http://localhost:8888](http://localhost:8888). Note that it will not auto-reload when you make changes.
-
 
 ## Deployment
 
