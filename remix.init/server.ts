@@ -8,12 +8,10 @@ export default createRequestHandler({
   mode: process.env.NODE_ENV,
 });
 
-
-if(process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development") {
   // Tell remix dev that the server is ready
   broadcastDevReady(build);
 }
-
 
 export const config = {
   cache: "manual",

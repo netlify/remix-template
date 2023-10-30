@@ -1,13 +1,9 @@
-import * as build from '@remix-run/dev/server-build'
-import { createRequestHandler } from '@netlify/remix-adapter'
-import type { Context, Config } from '@netlify/functions'
+import * as build from "@remix-run/dev/server-build";
+import { createRequestHandler } from "@netlify/remix-adapter";
 
-const handle = createRequestHandler({
+const handler = createRequestHandler({
   build,
   mode: process.env.NODE_ENV,
-})
+});
 
-export default function handler(request: Request, context: Context) {
-  return handle(request, context)
-}
-
+export default handler;
