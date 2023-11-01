@@ -20,5 +20,5 @@ export const config = {
   //
   // Add other exclusions here, e.g. "^/api/*$" for custom Netlify functions or
   // custom Netlify Edge Functions
-  excluded_patterns: ["^/_assets/*$"],
+  excludedPath: ["/build/*", "/favicon.ico"],
 };
