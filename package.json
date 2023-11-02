@@ -1,15 +1,14 @@
 {
   "private": true,
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "remix build",
-    "predev": "rimraf ./public/_redirects",
     "dev": "remix dev",
     "start": "netlify serve",
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@netlify/functions": "^1.3.0",
     "@remix-run/node": "*",
     "@remix-run/react": "*",
     "cross-env": "^7.0.3",
@@ -20,11 +19,10 @@
     "@remix-run/dev": "*",
     "@remix-run/eslint-config": "*",
     "@remix-run/serve": "*",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.8",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "eslint": "^8.27.0",
-    "rimraf": "^4.1.4",
-    "typescript": "^5.1.0"
+    "typescript": "^5.2.2"
   },
   "engines": {
     "node": ">=18"

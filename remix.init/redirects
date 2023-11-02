@@ -1,0 +1,4 @@
+# This file is copied into the public folder during the build step and removed during dev.
+# If you need to add your own redirects, add them in netlify.toml or they will be overwritten.
+# Do not remove the line below. This is required to serve the site when deployed.
+/* /.netlify/functions/server 200

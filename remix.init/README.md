@@ -43,21 +43,21 @@ Run
 netlify dev
 ```
 
-Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
+Open up [http://localhost:3000](http://localhost:3000), and you're ready to go!
 
 ### Adding Redirects and Rewrites
 
-To add redirects and rewrites, add them to the `netlify.toml` file or to the [\_app_redirects](_app_redirects) file. For more information about redirects and rewrites, see the [Netlify docs](https://docs.netlify.com/routing/redirects/).
+To add redirects and rewrites, add them to the `netlify.toml` file. For more information about redirects and rewrites, see the [Netlify docs](https://docs.netlify.com/routing/redirects/).
 
 ### Serve your site locally
 
-Run
+To serve your site locally in a production-like environment, run
 
 ```sh
 npm run start
 ```
 
-to serve your site locally at [http://localhost:8888](http://localhost:8888).
+Your site will be available at [http://localhost:8888](http://localhost:8888). Note that it will not auto-reload when you make changes.
 
 ## Deployment
 

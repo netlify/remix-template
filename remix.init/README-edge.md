@@ -40,26 +40,26 @@ npm install
 Run
 
 ```sh
-netlify dev
+npm run dev
 ```
 
 Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
 
 ### Serve your site locally
 
-Run
+To serve your site locally in a production-like environment, run
 
 ```sh
-npm netlify serve
+npm run start
 ```
 
-to serve your site locally at [http://localhost:8888](http://localhost:8888).
+Your site will be available at [http://localhost:8888](http://localhost:8888). Note that it will not auto-reload when you make changes.
 
 ## Excluding routes
 
 You can exclude routes for non-Remix code such as custom Netlify Functions or Edge Functions. To do this, add an additional entry in the array like in the example below:
 
-````diff
+```diff
 export const config = {
   cache: "manual",
   path: "/*",
@@ -70,6 +70,7 @@ export const config = {
 -  excluded_patterns: ["/_assets/*"],
 +  excluded_patterns: ["/_assets/*", "/api/*"],
 };
+```
 
 ## Deployment
 
@@ -81,4 +82,4 @@ netlify deploy --build
 
 # production deployment
 netlify deploy --build --prod
-````
+```

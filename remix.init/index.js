@@ -3,15 +3,15 @@ const fs = require("fs/promises");
 const { join } = require("path");
 const PackageJson = require("@npmcli/package-json");
 const execa = require("execa");
-const { Command } = require('commander');
+const { Command } = require("commander");
 
-const foldersToExclude = [".github", ".git"];
+const foldersToExclude = [".github"];
 
 // Netlify Edge Functions template file changes
 const edgeFilesToCopy = [
   ["README-edge.md", "README.md"],
   ["netlify-edge-toml", "netlify.toml"],
-  ["server.js"],
+  ["server.ts"],
   ["remix.config.js"],
   ["entry.server.tsx", "app/entry.server.tsx"],
   ["root.tsx", "app/root.tsx"],
@@ -22,9 +22,8 @@ const edgeFilesToCopy = [
 const filesToCopy = [
   ["README.md"],
   ["netlify-toml", "netlify.toml"],
-  ["_app_redirects"],
+  ["redirects", ".redirects"],
 ];
-
 
 async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
@@ -41,10 +40,7 @@ async function copyTemplateFiles({ files, rootDirectory }) {
 async function updatePackageJsonForEdge(directory) {
   const packageJson = await PackageJson.load(directory);
   const {
-    dependencies: {
-      "@remix-run/node": _node,
-      ...dependencies
-    },
+    dependencies: { "@remix-run/node": _node, ...dependencies },
     scripts,
     ...restOfPackageJson
   } = packageJson.content;
@@ -53,13 +49,14 @@ async function updatePackageJsonForEdge(directory) {
     // dev script is the same as the start script for Netlify Edge, "cross-env NODE_ENV=production netlify dev"
     scripts: {
       ...scripts,
-      predev: "rimraf ./.netlify/edge-functions/",
+      dev: 'remix dev --manual -c "ntl dev --framework=#static"',
     },
     ...restOfPackageJson,
     dependencies: {
       ...dependencies,
       "@netlify/edge-functions": "^2.0.0",
-      "@netlify/remix-edge-adapter": "1.2.0",
+      "@netlify/remix-edge-adapter": "^3.0.0",
+      "@netlify/remix-runtime": "^2.0.0",
     },
   });
 
@@ -69,19 +66,25 @@ async function updatePackageJsonForEdge(directory) {
 async function updatePackageJsonForFunctions(directory) {
   const packageJson = await PackageJson.load(directory);
   const {
-    dependencies: {
-      "@remix-run/node": _node,
-      ...dependencies
-    },
+    dependencies: { "@remix-run/node": _node, ...dependencies },
     scripts,
     ...restOfPackageJson
   } = packageJson.content;
 
   packageJson.update({
     ...restOfPackageJson,
+    scripts: {
+      ...scripts,
+      build: "npm run redirects:enable && remix build",
+      dev: "npm run redirects:disable && remix dev",
+      "redirects:enable": "shx cp .redirects public/_redirects",
+      "redirects:disable": "shx rm -f public/_redirects",
+    },
     dependencies: {
       ...dependencies,
-      "@netlify/remix-adapter": "^1.0.0",
+      "@netlify/functions": "^2.0.0",
+      "@netlify/remix-adapter": "^2.0.0",
+      shx: "^0.3.4",
     },
   });
 
@@ -104,7 +107,24 @@ async function removeNonTemplateFiles({ rootDirectory, folders }) {
   }
 }
 
-async function main({ rootDirectory }) {
+async function installAdditionalDependencies({
+  rootDirectory,
+  packageManager,
+}) {
+  try {
+    console.log(`Installing additional dependencies with ${packageManager}.`);
+    const npmInstall = await execa(packageManager, ["install"], {
+      cwd: rootDirectory,
+      stdio: "inherit",
+    });
+  } catch (e) {
+    console.log(
+      `Unable to install additional packages. Run ${packageManager} install in the root of the new project, "${rootDirectory}".`
+    );
+  }
+}
+
+async function main({ rootDirectory, packageManager }) {
   await removeNonTemplateFiles({
     rootDirectory,
     folders: foldersToExclude,
@@ -116,6 +136,7 @@ async function main({ rootDirectory }) {
       rootDirectory,
     });
     await updatePackageJsonForFunctions(rootDirectory);
+    await installAdditionalDependencies({ rootDirectory, packageManager });
     return;
   }
 
@@ -126,30 +147,28 @@ async function main({ rootDirectory }) {
 
   await updatePackageJsonForEdge(rootDirectory);
 
-  // The Netlify Edge Functions template has different and additional dependencies to install.
-  try {
-    console.log("installing additional npm packages...");
-    const npmInstall = await execa("npm", ["install"], { cwd: rootDirectory });
-    console.log(npmInstall.stdout);
-  } catch (e) {
-    console.log(
-      `Unable to install additional packages. Run npm install in the root of the new project, "${rootDirectory}".`
-    );
-  }
+  await installAdditionalDependencies({ rootDirectory, packageManager });
 }
 
 async function shouldUseEdge() {
-
   // parse the top level command args to see if edge was passed in
   const program = new Command();
   program
-    .option('--netlify-edge', 'explicitly use Netlify Edge Functions to serve this Remix site.', undefined)
-    .option('--no-netlify-edge', 'explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.', undefined)
+    .option(
+      "--netlify-edge",
+      "explicitly use Netlify Edge Functions to serve this Remix site.",
+      undefined
+    )
+    .option(
+      "--no-netlify-edge",
+      "explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.",
+      undefined
+    );
   program.allowUnknownOption().parse();
 
   const passedEdgeOption = program.opts().netlifyEdge;
 
-  if(passedEdgeOption !== true && passedEdgeOption !== false){
+  if (passedEdgeOption !== true && passedEdgeOption !== false) {
     const { edge } = await inquirer.prompt([
       {
         name: "edge",

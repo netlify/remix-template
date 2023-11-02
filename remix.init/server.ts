@@ -1,12 +1,17 @@
-// Import path interpreted by the Remix compiler
 import * as build from "@remix-run/dev/server-build";
 import { createRequestHandler } from "@netlify/remix-edge-adapter";
+import { broadcastDevReady } from "@netlify/remix-runtime";
 
 export default createRequestHandler({
   build,
   // process.env.NODE_ENV is provided by Remix at compile time
   mode: process.env.NODE_ENV,
 });
+
+if (process.env.NODE_ENV === "development") {
+  // Tell remix dev that the server is ready
+  broadcastDevReady(build);
+}
 
 export const config = {
   cache: "manual",
@@ -15,5 +20,5 @@ export const config = {
   //
   // Add other exclusions here, e.g. "^/api/*$" for custom Netlify functions or
   // custom Netlify Edge Functions
-  excluded_patterns: ["^/_assets/*$"],
+  excludedPath: ["/build/*", "/favicon.ico"],
 };
