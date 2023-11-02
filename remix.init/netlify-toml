@@ -4,11 +4,7 @@ publish = "public"
 
 [dev]
 command = "npm run dev"
-
-[[redirects]]
-from = "/*"
-to = "/.netlify/functions/server"
-status = 200
+targetPort = 3000
 
 # Set immutable caching for static files, because they have fingerprinted filenames
 
