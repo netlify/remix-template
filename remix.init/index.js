@@ -19,11 +19,7 @@ const edgeFilesToCopy = [
 ];
 
 // Netlify Functions template file changes
-const filesToCopy = [
-  ["README.md"],
-  ["netlify-toml", "netlify.toml"],
-  ["redirects", ".redirects"],
-];
+const filesToCopy = [["README.md"], ["netlify-toml", "netlify.toml"]];
 
 async function copyTemplateFiles({ files, rootDirectory }) {
   for (const [file, target] of files) {
@@ -65,26 +61,14 @@ async function updatePackageJsonForEdge(directory) {
 
 async function updatePackageJsonForFunctions(directory) {
   const packageJson = await PackageJson.load(directory);
-  const {
-    dependencies: { "@remix-run/node": _node, ...dependencies },
-    scripts,
-    ...restOfPackageJson
-  } = packageJson.content;
+  const { dependencies, ...restOfPackageJson } = packageJson.content;
 
   packageJson.update({
     ...restOfPackageJson,
-    scripts: {
-      ...scripts,
-      build: "npm run redirects:enable && remix build",
-      dev: "npm run redirects:disable && remix dev",
-      "redirects:enable": "shx cp .redirects public/_redirects",
-      "redirects:disable": "shx rm -f public/_redirects",
-    },
     dependencies: {
       ...dependencies,
       "@netlify/functions": "^2.0.0",
       "@netlify/remix-adapter": "^2.0.0",
-      shx: "^0.3.4",
     },
   });
 
