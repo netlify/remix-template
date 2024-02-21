@@ -1,181 +1,180 @@
-const { intro, outro } = require("@clack/prompts");
+const {
+  intro,
+  outro,
+  select,
+  isCancel,
+  cancel,
+  spinner,
+} = require("@clack/prompts");
+const argh = require("argh");
+const process = require("node:process");
+const { relative, join, dirname } = require("node:path");
+const fs = require("fs/promises");
+const PackageJson = require("@npmcli/package-json");
+const execa = require("execa");
 
-// const inquirer = require("inquirer");
-// const fs = require("fs/promises");
-// const { join } = require("path");
-// const PackageJson = require("@npmcli/package-json");
-// const execa = require("execa");
-// const { Command } = require("commander");
+const foldersToRemove = [".github"];
 
-// const foldersToExclude = [".github"];
+const packagesToRemove = {
+  edge: ["@netlify/remix-adapter", "@netlify/functions"],
+  functions: [
+    "@netlify/edge-functions",
+    "@netlify/remix-edge-adapter",
+    "@netlify/remix-runtime",
+  ],
+};
 
-// // Netlify Edge Functions template file changes
-// const edgeFilesToCopy = [
-//   ["README-edge.md", "README.md"],
-//   ["netlify-edge-toml", "netlify.toml"],
-//   ["server.ts"],
-//   ["remix.config.js"],
-//   ["entry.server.tsx", "app/entry.server.tsx"],
-//   ["root.tsx", "app/root.tsx"],
-//   ["vscode.json", ".vscode/settings.json"],
-// ];
+async function mergeDirs(src, dest) {
+  await fs.mkdir(dest, { recursive: true });
+  let entries = await fs.readdir(src, { withFileTypes: true });
 
-// // Netlify Functions template file changes
-// const filesToCopy = [["README.md"], ["netlify-toml", "netlify.toml"]];
+  for (let entry of entries) {
+    const srcPath = join(src, entry.name);
+    const destPath = join(dest, entry.name);
 
-// async function copyTemplateFiles({ files, rootDirectory }) {
-//   for (const [file, target] of files) {
-//     let sourceFile = file;
-//     let targetFile = target || file;
-
-//     await fs.copyFile(
-//       join(rootDirectory, "remix.init", sourceFile),
-//       join(rootDirectory, targetFile)
-//     );
-//   }
-// }
-
-// async function updatePackageJsonForEdge(directory) {
-//   const packageJson = await PackageJson.load(directory);
-//   const {
-//     dependencies: { "@remix-run/node": _node, ...dependencies },
-//     scripts,
-//     ...restOfPackageJson
-//   } = packageJson.content;
-
-//   packageJson.update({
-//     // dev script is the same as the start script for Netlify Edge, "cross-env NODE_ENV=production netlify dev"
-//     scripts: {
-//       ...scripts,
-//       dev: 'remix dev --manual -c "ntl dev --framework=#static"',
-//     },
-//     ...restOfPackageJson,
-//     dependencies: {
-//       ...dependencies,
-//       "@netlify/edge-functions": "^2.0.0",
-//       "@netlify/remix-edge-adapter": "^3.0.0",
-//       "@netlify/remix-runtime": "^2.0.0",
-//     },
-//   });
-
-//   await packageJson.save();
-// }
-
-// async function updatePackageJsonForFunctions(directory) {
-//   const packageJson = await PackageJson.load(directory);
-//   const { dependencies, ...restOfPackageJson } = packageJson.content;
-
-//   packageJson.update({
-//     ...restOfPackageJson,
-//     dependencies: {
-//       ...dependencies,
-//       "@netlify/functions": "^2.0.0",
-//       "@netlify/remix-adapter": "^2.0.0",
-//     },
-//   });
-
-//   await packageJson.save();
-// }
-
-// async function removeNonTemplateFiles({ rootDirectory, folders }) {
-//   try {
-//     await Promise.allSettled(
-//       folders.map((folder) =>
-//         fs.rm(join(rootDirectory, folder), { recursive: true, force: true })
-//       )
-//     );
-//   } catch (e) {
-//     console.log(
-//       `Unable to remove folders ${folders.join(
-//         ", "
-//       )}. You can remove them manually.`
-//     );
-//   }
-// }
-
-// async function installAdditionalDependencies({
-//   rootDirectory,
-//   packageManager,
-// }) {
-//   try {
-//     console.log(`Installing additional dependencies with ${packageManager}.`);
-//     const npmInstall = await execa(packageManager, ["install"], {
-//       cwd: rootDirectory,
-//       stdio: "inherit",
-//     });
-//   } catch (e) {
-//     console.log(
-//       `Unable to install additional packages. Run ${packageManager} install in the root of the new project, "${rootDirectory}".`
-//     );
-//   }
-// }
-
-async function main({ rootDirectory, packageManager, ...rest }) {
-  intro(`create-my-app`);
-  outro(`You're all set!`);
-  console.log({ rootDirectory, packageManager, ...rest });
-
-  //   await removeNonTemplateFiles({
-  //     rootDirectory,
-  //     folders: foldersToExclude,
-  //   });
-  //   if (!(await shouldUseEdge())) {
-  //     await copyTemplateFiles({
-  //       files: filesToCopy,
-  //       rootDirectory,
-  //     });
-  //     await updatePackageJsonForFunctions(rootDirectory);
-  //     await installAdditionalDependencies({ rootDirectory, packageManager });
-  //     return;
-  //   }
-  //   await Promise.all([
-  //     fs.mkdir(join(rootDirectory, ".vscode")),
-  //     copyTemplateFiles({ files: edgeFilesToCopy, rootDirectory }),
-  //   ]);
-  //   await updatePackageJsonForEdge(rootDirectory);
-  //   await installAdditionalDependencies({ rootDirectory, packageManager });
+    if (entry.isDirectory()) {
+      await mergeDirs(srcPath, destPath);
+    } else {
+      await fs.mkdir(dirname(destPath), { recursive: true });
+      await fs.copyFile(srcPath, destPath);
+    }
+  }
 }
 
-// async function shouldUseEdge() {
-//   // parse the top level command args to see if edge was passed in
-//   const program = new Command();
-//   program
-//     .option(
-//       "--netlify-edge",
-//       "explicitly use Netlify Edge Functions to serve this Remix site.",
-//       undefined
-//     )
-//     .option(
-//       "--no-netlify-edge",
-//       "explicitly do NOT use Netlify Edge Functions to serve this Remix site - use Serverless Functions instead.",
-//       undefined
-//     );
-//   program.allowUnknownOption().parse();
+async function copyTemplateFiles(rootDirectory) {
+  const source = join(rootDirectory, "remix.init", "edge");
+  await mergeDirs(source, rootDirectory);
+}
 
-//   const passedEdgeOption = program.opts().netlifyEdge;
+async function removeDependencies(directory, dependencies) {
+  const packageJson = await PackageJson.load(directory);
 
-//   if (passedEdgeOption !== true && passedEdgeOption !== false) {
-//     const { edge } = await inquirer.prompt([
-//       {
-//         name: "edge",
-//         type: "list",
-//         message: "Run your Remix site with:",
-//         choices: [
-//           {
-//             name: "Netlify Functions",
-//             value: false,
-//           },
-//           {
-//             name: "Netlify Edge Functions",
-//             value: true,
-//           },
-//         ],
-//       },
-//     ]);
-//     return edge;
-//   }
+  const { dependencies: currentDependencies = {} } = packageJson.content;
 
-//   return passedEdgeOption;
-// }
+  packageJson.update({
+    dependencies: Object.fromEntries(
+      Object.entries(currentDependencies).filter(
+        ([dependency]) => !dependencies.includes(dependency)
+      )
+    ),
+  });
+
+  await packageJson.save();
+}
+
+async function removeNonTemplateFiles({ rootDirectory, folders }) {
+  try {
+    await Promise.allSettled(
+      folders.map((folder) =>
+        fs.rm(join(rootDirectory, folder), { recursive: true, force: true })
+      )
+    );
+  } catch (e) {
+    console.log(
+      `Unable to remove folders ${folders.join(
+        ", "
+      )}. You can remove them manually.`
+    );
+  }
+}
+
+async function installAdditionalDependencies({
+  rootDirectory,
+  packageManager,
+}) {
+  try {
+    console.log(`Installing additional dependencies with ${packageManager}.`);
+    const result = await execa(packageManager, ["install"], {
+      cwd: rootDirectory,
+      stdio: "ignore",
+    });
+    if (result.failed) {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+  // return true;
+}
+
+async function shouldUseEdge(rootDirectory) {
+  const { "netlify-edge": netlifyEdge } = argh.argv;
+
+  let useEdge = netlifyEdge;
+
+  if (useEdge === undefined) {
+    const projectType = await select({
+      message: "Run your Remix site with:",
+      options: [
+        {
+          value: "functions",
+          label: "Netlify Functions",
+          hint: "A Node-based runtime, running in one region",
+        },
+        {
+          value: "edge",
+          label: "Netlify Edge Functions",
+          hint: "A web-based runtime, running at the edge",
+        },
+      ],
+    });
+    if (isCancel(projectType)) {
+      cancel(
+        `Project setup cancelled. Run remix init inside "${relative(
+          process.cwd(),
+          rootDirectory
+        )}" to complete setup.`
+      );
+      process.exit(1);
+    }
+    useEdge = projectType === "edge";
+  }
+  return useEdge;
+}
+
+async function main({ rootDirectory, packageManager }) {
+  intro(`Welcome to Remix on Netlify`);
+
+  const useEdge = await shouldUseEdge(rootDirectory);
+  const spin = spinner();
+  spin.start("Setting up your project");
+  if (useEdge) {
+    await copyTemplateFiles(rootDirectory);
+  }
+  await removeNonTemplateFiles({
+    rootDirectory,
+    folders: foldersToRemove,
+  });
+  await fs.copyFile(
+    join(rootDirectory, "remix.init", "README.md"),
+    join(rootDirectory, "README.md")
+  );
+  spin.stop("Setup complete");
+
+  spin.start("Updating dependencies");
+  await removeDependencies(
+    rootDirectory,
+    packagesToRemove[useEdge ? "edge" : "functions"]
+  );
+
+  const result = await installAdditionalDependencies({
+    rootDirectory,
+    packageManager,
+  });
+
+  if (!result) {
+    spin.stop("Failed");
+
+    cancel(
+      `Failed to install additional dependencies. Run "${packageManager} install" inside "${relative(
+        process.cwd(),
+        rootDirectory
+      )}" to complete setup.`
+    );
+  } else {
+    spin.stop("Dependencies updated");
+    outro(`Project setup for Netlify complete. Happy Remixing!`);
+  }
+}
 
 module.exports = main;
