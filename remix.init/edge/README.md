@@ -1,7 +1,7 @@
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
-- [Netlify Edge Functions Overview](https://docs.netlify.com/edge-functions/overview/)
+- [Netlify Functions Overview](https://docs.netlify.com/functions/overview)
 
 ## Netlify Setup
 
@@ -40,10 +40,14 @@ npm install
 Run
 
 ```sh
-npm run dev
+netlify dev
 ```
 
-Open up [http://localhost:8888](http://localhost:8888), and you're ready to go!
+Open up [http://localhost:3000](http://localhost:3000), and you're ready to go!
+
+### Adding Redirects and Rewrites
+
+To add redirects and rewrites, add them to the `netlify.toml` file. For more information about redirects and rewrites, see the [Netlify docs](https://docs.netlify.com/routing/redirects/).
 
 ### Serve your site locally
 
@@ -54,23 +58,6 @@ npm run start
 ```
 
 Your site will be available at [http://localhost:8888](http://localhost:8888). Note that it will not auto-reload when you make changes.
-
-## Excluding routes
-
-You can exclude routes for non-Remix code such as custom Netlify Functions or Edge Functions. To do this, add an additional entry in the array like in the example below:
-
-```diff
-export const config = {
-  cache: "manual",
-  path: "/*",
-  // Let the CDN handle requests for static assets, i.e. /_assets/*
-  //
-  // Add other exclusions here, e.g. "/api/*" for custom Netlify functions or
-  // custom Netlify Edge Functions
--  excluded_patterns: ["/_assets/*"],
-+  excluded_patterns: ["/_assets/*", "/api/*"],
-};
-```
 
 ## Deployment
 
