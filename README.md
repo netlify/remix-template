@@ -8,7 +8,6 @@ To use the template, run
 npx create-remix@latest --template netlify/remix-template
 ```
 
-
 This project includes:
 
 - Netlify Functions template for Remix sites
@@ -27,7 +26,7 @@ If you're new to Remix stacks and the remix.init concept, see the official [Remi
 Run
 
 ```bash
-npx create-remix@latest --template ./
+npx create-remix@latest --template ./remix-template
 ```
 
 to test your changes to the template. Follow the steps the Remix CLI prompts you with to create a new project. Ensure to test for both the Netlify Functions template and the Netlify Edge Functions template.
