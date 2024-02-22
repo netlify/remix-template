@@ -41,15 +41,25 @@ async function mergeDirs(src, dest) {
   }
 }
 
-async function copyTemplateFiles(rootDirectory) {
-  const source = join(rootDirectory, "remix.init", "edge");
+async function copyTemplateFiles(rootDirectory, useEdge) {
+  const source = join(
+    rootDirectory,
+    "remix.init",
+    useEdge ? "edge" : "functions"
+  );
   await mergeDirs(source, rootDirectory);
 }
 
-async function removeDependencies(directory, dependencies) {
+async function removeUpdatePackageJson(directory, dependencies) {
   const packageJson = await PackageJson.load(directory);
 
-  const { dependencies: currentDependencies = {} } = packageJson.content;
+  const { dependencies: currentDependencies = {}, scripts } =
+    packageJson.content;
+
+  // Remove the auto-init command from the scripts
+  for (const script of ["build", "start", "dev"]) {
+    scripts[script] = scripts[script]?.replace("remix init && ", "");
+  }
 
   packageJson.update({
     dependencies: Object.fromEntries(
@@ -94,7 +104,7 @@ async function installAdditionalDependencies({
   } catch (e) {
     return false;
   }
-  // return true;
+  return true;
 }
 
 async function shouldUseEdge(rootDirectory) {
@@ -120,10 +130,9 @@ async function shouldUseEdge(rootDirectory) {
     });
     if (isCancel(projectType)) {
       cancel(
-        `Project setup cancelled. Run remix init inside "${relative(
-          process.cwd(),
-          rootDirectory
-        )}" to complete setup.`
+        `Project setup cancelled. Run remix init inside ${
+          relative(process.cwd(), rootDirectory) || "this folder"
+        } to complete setup.`
       );
       process.exit(1);
     }
@@ -134,25 +143,20 @@ async function shouldUseEdge(rootDirectory) {
 
 async function main({ rootDirectory, packageManager }) {
   intro(`Welcome to Remix on Netlify`);
-
+  console.log("rootDirectory", rootDirectory);
   const useEdge = await shouldUseEdge(rootDirectory);
   const spin = spinner();
   spin.start("Setting up your project");
-  if (useEdge) {
-    await copyTemplateFiles(rootDirectory);
-  }
+  await copyTemplateFiles(rootDirectory, useEdge);
   await removeNonTemplateFiles({
     rootDirectory,
     folders: foldersToRemove,
   });
-  await fs.copyFile(
-    join(rootDirectory, "remix.init", "README.md"),
-    join(rootDirectory, "README.md")
-  );
+
   spin.stop("Setup complete");
 
   spin.start("Updating dependencies");
-  await removeDependencies(
+  await removeUpdatePackageJson(
     rootDirectory,
     packagesToRemove[useEdge ? "edge" : "functions"]
   );

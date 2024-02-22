@@ -1,6 +1,6 @@
 # Netlify Remix Template
 
-Welcome to the Netlify Remix Template project.
+Welcome to the Netlify Remix Template project. If you were expecting this to be your site, run `remix init` in the root of this project to get started.
 
 To use the template, run
 
