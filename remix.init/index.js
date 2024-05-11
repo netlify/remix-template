@@ -143,7 +143,6 @@ async function shouldUseEdge(rootDirectory) {
 
 async function main({ rootDirectory, packageManager }) {
   intro(`Welcome to Remix on Netlify`);
-  console.log("rootDirectory", rootDirectory);
   const useEdge = await shouldUseEdge(rootDirectory);
   const spin = spinner();
   spin.start("Setting up your project");
