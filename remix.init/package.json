@@ -6,6 +6,8 @@
   "private": true,
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "argh": "^1.0.0"
+    "@npmcli/package-json": "^4.0.1",
+    "argh": "^1.0.0",
+    "execa": "5.1.1"
   }
 }
